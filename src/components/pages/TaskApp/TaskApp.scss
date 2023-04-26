@@ -1,0 +1,10 @@
+.TaskApp {
+    max-width: 768px;
+    margin: 0 auto;
+
+    .tasklists {
+        display: flex;
+        flex-direction: row;
+        gap: 1em;
+    }
+}
