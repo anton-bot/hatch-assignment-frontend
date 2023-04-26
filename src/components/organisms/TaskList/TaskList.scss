@@ -1,0 +1,9 @@
+.TaskList {
+    flex: 1 0 auto;
+
+    .tasks {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+    }
+}

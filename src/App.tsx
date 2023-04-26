@@ -1,9 +1,10 @@
 import './App.scss';
+import { TaskApp } from './components/pages/TaskApp/TaskApp';
 
 function App() {
   return (
     <div className="App">
-      TODO
+      <TaskApp />
     </div>
   );
 }
