@@ -2,11 +2,11 @@ import {
   Burger,
   Button,
   Container,
-  Drawer,
   Header,
   NavLink,
+  Paper,
+  Transition,
   createStyles,
-  useMantineTheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
@@ -18,14 +18,13 @@ type Props = {
 export const AppHeader = (props: Props) => {
   const { links, children } = props;
   const { classes } = useStyles();
-  const theme = useMantineTheme();
-  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+  const [opened, { toggle }] = useDisclosure(false);
 
   return (
     <Header className={classes.header} height="4rem">
       <Container className={classes.inner}>
         <div className={classes.appName}>{children}</div>
-        <div>
+        <div className={classes.hideOnMobile}>
           {links.map((link) => (
             <Button key={link.label} variant="filled" onClick={link.action}>
               {link.label}
@@ -33,28 +32,27 @@ export const AppHeader = (props: Props) => {
           ))}
         </div>
         <Burger
-          opened={drawerOpened}
-          onClick={toggleDrawer}
+          opened={opened}
+          onClick={toggle}
           className={classes.burger}
           size="sm"
           color="#fff"
         />
-        <Drawer
-          opened={drawerOpened}
-          onClose={closeDrawer}
-          size="100%"
-          padding="md"
-          title="Actions"
-          className={classes.hideOnDesktop}
-          zIndex={1000000}
-          overlayProps={{ styles: { background: theme.colors.blue[8] } }}
-        >
-          {links.map((link) => (
-            <NavLink key={link.label} onClick={link.action}>
-              {link.label}
-            </NavLink>
-          ))}
-        </Drawer>
+        <Transition transition="pop-top-right" duration={200} mounted={opened}>
+          {(styles) => (
+            <Paper className={classes.dropdown} withBorder style={styles}>
+              {links.map((link) => (
+                <NavLink
+                  key={link.label}
+                  label={link.label}
+                  onClick={link.action}
+                  variant="filled"
+                  active
+                />
+              ))}
+            </Paper>
+          )}
+        </Transition>
       </Container>
     </Header>
   );
@@ -89,7 +87,24 @@ const useStyles = createStyles((theme) => ({
       display: 'none',
     },
   },
-  hideOnDesktop: {
+  hideOnMobile: {
+    display: 'none',
+    [theme.fn.largerThan('sm')]: {
+      display: 'flex',
+    },
+  },
+  dropdown: {
+    position: 'absolute',
+    top: '4rem',
+    left: 0,
+    right: 0,
+    zIndex: 0,
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopWidth: 0,
+    overflow: 'hidden',
+    minHeight: '5em',
+
     [theme.fn.largerThan('sm')]: {
       display: 'none',
     },
