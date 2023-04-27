@@ -2,6 +2,8 @@ import { TaskList } from '../../organisms/TaskList/TaskList';
 import { Task } from '../../../types/Task';
 import { AppHeader } from '../../molecules/AppHeader/AppHeader';
 import { createStyles } from '@mantine/styles';
+import { AddTaskBox } from '../../molecules/AddTaskBox/AddTaskBox';
+import { SearchBox } from '../../molecules/SearchBox/SearchBox';
 
 const SAMPLE_TASKS: Task[] = [
   {
@@ -35,13 +37,17 @@ const SAMPLE_COMPLETED_TASKS: Task[] = [
 ];
 
 export const TaskApp = () => {
-  const { classes } = useStyles();
+  const { classes, cx } = useStyles();
   return (
     <div className={classes.layout}>
       <AppHeader links={[{ label: 'Delete all tasks', action: () => undefined }]}>
         Marvelous v2.0
       </AppHeader>
-      <div className={classes.tasklists}>
+      <div className={cx(classes.limitedWidth, classes.inputs)}>
+        <AddTaskBox />
+        <SearchBox />
+      </div>
+      <div className={classes.limitedWidth}>
         <TaskList title="To Do" tasks={SAMPLE_TASKS} />
         <TaskList title="Done" tasks={SAMPLE_COMPLETED_TASKS} />
       </div>
@@ -55,7 +61,7 @@ const useStyles = createStyles((theme) => ({
     flexDirection: 'column',
     gap: theme.spacing.xl,
   },
-  tasklists: {
+  limitedWidth: {
     width: theme.breakpoints.sm,
     margin: '0 auto',
     display: 'flex',
@@ -67,6 +73,11 @@ const useStyles = createStyles((theme) => ({
       width: 'unset',
       flex: '1 0 auto',
       margin: '0 0.5em',
+    },
+  },
+  inputs: {
+    [theme.fn.smallerThan('sm')]: {
+      flexDirection: 'column-reverse',
     },
   },
 }));
