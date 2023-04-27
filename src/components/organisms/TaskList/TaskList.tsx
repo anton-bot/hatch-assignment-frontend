@@ -2,7 +2,6 @@ import { Card, createStyles } from '@mantine/core';
 import { Task } from '../../../types/Task';
 import { TaskListHeader } from '../../atoms/TaskListHeader/TaskListHeader';
 import { TaskCheckbox } from '../../molecules/TaskCheckbox/TaskCheckbox';
-import './TaskList.scss';
 
 type Props = {
   title: string;
@@ -13,10 +12,10 @@ export const TaskList = (props: Props) => {
   const { title, tasks } = props;
   const { classes } = useStyles();
   return (
-    <div className="TaskList">
+    <div className={classes.root}>
       <Card withBorder padding="md" radius="sm" shadow="sm" className={classes.card}>
         <TaskListHeader>{title}</TaskListHeader>
-        <div className="tasks">
+        <div className={classes.tasks}>
           {tasks.map((task) => (
             <TaskCheckbox key={task.id} {...task} />
           ))}
@@ -27,7 +26,16 @@ export const TaskList = (props: Props) => {
 };
 
 const useStyles = createStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flex: '1 0 auto',
+  },
   card: {
     flex: '1 0 auto',
+  },
+  tasks: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing.md,
   },
 }));
