@@ -46,7 +46,6 @@
     ]
   },
   "devDependencies": {
-    "node-sass": "^7.0.3",
     "prettier": "^2.8.8"
   }
 }

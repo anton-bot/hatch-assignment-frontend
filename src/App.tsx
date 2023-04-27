@@ -1,4 +1,3 @@
-import './App.scss';
 import { TaskApp } from './components/pages/TaskApp/TaskApp';
 
 function App() {

@@ -1,5 +1,4 @@
-import './TaskListHeader.scss';
-import { Text } from '@mantine/core';
+import { Text, createStyles } from '@mantine/core';
 
 type Props = {
   children: React.ReactNode;
@@ -7,11 +6,19 @@ type Props = {
 
 export const TaskListHeader = (props: Props) => {
   const { children } = props;
+  const { classes } = useStyles();
   return (
-    <div className="TaskListHeader">
+    <div className={classes.root}>
       <Text size="lg" weight={600}>
         {children}
       </Text>
     </div>
   );
 };
+
+const useStyles = createStyles((theme) => ({
+  root: {
+    marginBottom: '1em',
+    borderBottom: `1px solid ${theme.colors.gray[3]}`,
+  },
+}));
