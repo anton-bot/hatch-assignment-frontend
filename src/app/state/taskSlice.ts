@@ -4,6 +4,7 @@ import { fetchAllTasks } from '../../api/fetchAllTasks';
 import { createNewTask } from '../../api/createNewTask';
 import { deleteAllTasks } from '../../api/deleteAllTasks';
 import { markCompleted } from '../../api/markCompleted';
+import { GroupedTasks } from '../../types/GroupedTasks';
 
 export type TaskState = {
   active: Task[];
@@ -21,9 +22,12 @@ const initialState: TaskState = {
   status: 'idle',
 };
 
-export const getTasksAsync = createAsyncThunk(
+export const getTasksAsync = createAsyncThunk<GroupedTasks>(
   'task/getTasks',
-  async (filter?: string) => await fetchAllTasks(filter),
+  async (_, { getState }) => {
+    const filter = (getState() as { task: TaskState }).task.filter;
+    return await fetchAllTasks(filter);
+  },
 );
 export const createNewTaskAsync = createAsyncThunk(
   'task/createNewTask',
