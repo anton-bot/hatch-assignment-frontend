@@ -1,13 +1,22 @@
 import { Input, createStyles } from '@mantine/core';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectFilter, setFilter } from '../../../app/state/taskSlice';
+import { useDebouncedValue } from '@mantine/hooks';
+import { useEffect } from 'react';
+import { getTasksAsync, selectFilter, setFilter } from '../../../app/state/taskSlice';
 
-type Props = {};
+const SEARCH_DEBOUNCE_DELAY = 300;
 
-export const SearchBox = (props: Props) => {
-  const { classes } = useStyles();
-  const filter = useAppSelector(selectFilter);
+export const SearchBox = () => {
   const dispatch = useAppDispatch();
+  const { classes } = useStyles();
+
+  const filter = useAppSelector(selectFilter);
+  const [debouncedFilter] = useDebouncedValue(filter, SEARCH_DEBOUNCE_DELAY);
+
+  useEffect(() => {
+    dispatch(getTasksAsync());
+  }, [debouncedFilter, dispatch]);
+
   return (
     <div className={classes.root}>
       <Input

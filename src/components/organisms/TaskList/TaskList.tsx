@@ -19,6 +19,7 @@ export const TaskList = (props: Props) => {
           {tasks.map((task) => (
             <TaskCheckbox key={task.id} {...task} />
           ))}
+          {tasks.length === 0 && <div className={classes.notasks}>No tasks</div>}
         </div>
       </Card>
     </div>
@@ -37,5 +38,10 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing.md,
+  },
+  notasks: {
+    color: theme.colors.gray[6],
+    fontSize: theme.fontSizes.sm,
+    textAlign: 'center',
   },
 }));
