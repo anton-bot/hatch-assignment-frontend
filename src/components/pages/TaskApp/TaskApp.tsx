@@ -4,7 +4,12 @@ import { createStyles } from '@mantine/styles';
 import { AddTaskBox } from '../../molecules/AddTaskBox/AddTaskBox';
 import { SearchBox } from '../../molecules/SearchBox/SearchBox';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { getTasksAsync, selectActiveTasks, selectDoneTasks } from '../../../app/state/taskSlice';
+import {
+  deleteAllTasksAsync,
+  getTasksAsync,
+  selectActiveTasks,
+  selectDoneTasks,
+} from '../../../app/state/taskSlice';
 import { useEffect } from 'react';
 
 export const TaskApp = () => {
@@ -20,7 +25,9 @@ export const TaskApp = () => {
 
   return (
     <div className={classes.layout}>
-      <AppHeader links={[{ label: 'Delete all tasks', action: () => undefined }]}>
+      <AppHeader
+        links={[{ label: 'Delete all tasks', action: () => dispatch(deleteAllTasksAsync()) }]}
+      >
         Marvelous v2.0
       </AppHeader>
       <div className={cx(classes.limitedWidth, classes.inputs)}>

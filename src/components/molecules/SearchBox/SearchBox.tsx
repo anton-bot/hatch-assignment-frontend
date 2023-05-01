@@ -1,12 +1,20 @@
 import { Input, createStyles } from '@mantine/core';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { selectFilter, setFilter } from '../../../app/state/taskSlice';
 
 type Props = {};
 
 export const SearchBox = (props: Props) => {
   const { classes } = useStyles();
+  const filter = useAppSelector(selectFilter);
+  const dispatch = useAppDispatch();
   return (
     <div className={classes.root}>
-      <Input placeholder="Search tasks" />
+      <Input
+        placeholder="Search tasks"
+        value={filter}
+        onInput={(e) => dispatch(setFilter(e.currentTarget.value))}
+      />
     </div>
   );
 };

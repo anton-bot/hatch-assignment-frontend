@@ -28,7 +28,7 @@ export const TaskList = (props: Props) => {
 const useStyles = createStyles((theme) => ({
   root: {
     display: 'flex',
-    flex: '1 0 auto',
+    flex: '50%',
   },
   card: {
     flex: '1 0 auto',
