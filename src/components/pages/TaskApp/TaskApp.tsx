@@ -11,6 +11,7 @@ import {
   selectDoneTasks,
 } from '../../../app/state/taskSlice';
 import { useEffect } from 'react';
+import { Suggestions } from '../../organisms/Suggestions/Suggestions';
 
 export const TaskApp = () => {
   const { classes, cx } = useStyles();
@@ -33,6 +34,9 @@ export const TaskApp = () => {
       <div className={cx(classes.limitedWidth, classes.inputs)}>
         <AddTaskBox />
         <SearchBox />
+      </div>
+      <div className={classes.limitedWidth}>
+        <Suggestions />
       </div>
       <div className={classes.limitedWidth}>
         <TaskList title="To Do" tasks={activeTasks} />
