@@ -1,7 +1,14 @@
 # Task Tracker - Frontend
 
-## Description
+This is a simple demo web app that manages tasks.
 
-## TODO
+## Deployed app
 
-- add react-flip-move library
+The app is deployed at https://hatch-assignment.azurewebsites.met
+
+## Running
+
+```bash
+npm ci
+npm run dev
+```
