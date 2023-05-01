@@ -30,6 +30,11 @@ const useStyles = createStyles((theme) => ({
   root: {
     display: 'flex',
     flex: '50%',
+    maxWidth: '50%',
+
+    [theme.fn.smallerThan('sm')]: {
+      maxWidth: '100%',
+    },
   },
   card: {
     flex: '1 0 auto',

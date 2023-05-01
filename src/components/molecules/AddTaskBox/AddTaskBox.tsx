@@ -19,6 +19,11 @@ export const AddTaskBox = (props: Props) => {
         placeholder="Add a task"
         value={label}
         onInput={(e) => dispatch(setNewTaskLabel(e.currentTarget.value))}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            dispatch(createNewTaskAsync(label));
+          }
+        }}
       />
       <Button onClick={() => dispatch(createNewTaskAsync(label))}>Add</Button>
     </div>

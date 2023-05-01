@@ -5,6 +5,7 @@ import { createNewTask } from '../../api/createNewTask';
 import { deleteAllTasks } from '../../api/deleteAllTasks';
 import { markCompleted } from '../../api/markCompleted';
 import { GroupedTasks } from '../../types/GroupedTasks';
+import { fetchSuggestions } from '../../api/fetchSuggestions';
 
 export type TaskState = {
   active: Task[];
@@ -12,6 +13,8 @@ export type TaskState = {
   newTaskLabel: string;
   filter: string;
   status: 'idle' | 'loading' | 'failed';
+  suggestionsClosed: boolean;
+  suggestions: string[];
 };
 
 const initialState: TaskState = {
@@ -20,6 +23,8 @@ const initialState: TaskState = {
   newTaskLabel: '',
   filter: '',
   status: 'idle',
+  suggestionsClosed: false,
+  suggestions: [],
 };
 
 export const getTasksAsync = createAsyncThunk<GroupedTasks>(
@@ -39,6 +44,7 @@ export const createNewTaskAsync = createAsyncThunk(
     await createNewTask(label);
     dispatch(setNewTaskLabel(''));
     dispatch(getTasksAsync());
+    dispatch(fetchSuggestionsAsync(label));
   },
 );
 export const deleteAllTasksAsync = createAsyncThunk(
@@ -55,6 +61,19 @@ export const markCompletedAsync = createAsyncThunk<void, { id: string; done: boo
     dispatch(getTasksAsync());
   },
 );
+export const addSuggestionAsync = createAsyncThunk<string, string>(
+  'task/addSuggestion',
+  async (suggestion, { dispatch }) => {
+    dispatch(createNewTaskAsync(suggestion));
+    return suggestion;
+  },
+);
+export const fetchSuggestionsAsync = createAsyncThunk<string[], string>(
+  'task/fetchSuggestions',
+  async (task) => {
+    return await fetchSuggestions(task);
+  },
+);
 
 export const counterSlice = createSlice({
   name: 'task',
@@ -65,6 +84,12 @@ export const counterSlice = createSlice({
     },
     setFilter: (state, action) => {
       state.filter = action.payload;
+    },
+    setSuggestionsClosed: (state, action) => {
+      state.suggestionsClosed = action.payload;
+    },
+    setSuggestions: (state, action) => {
+      state.suggestions = action.payload;
     },
   },
   extraReducers: (builder) =>
@@ -97,14 +122,46 @@ export const counterSlice = createSlice({
       })
       .addCase(deleteAllTasksAsync.rejected, (state) => {
         state.status = 'failed';
+      })
+      .addCase(markCompletedAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(markCompletedAsync.fulfilled, (state) => {
+        state.status = 'idle';
+      })
+      .addCase(markCompletedAsync.rejected, (state) => {
+        state.status = 'failed';
+      })
+      .addCase(addSuggestionAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(addSuggestionAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.suggestions = state.suggestions.filter((suggestion) => suggestion !== action.payload);
+      })
+      .addCase(addSuggestionAsync.rejected, (state) => {
+        state.status = 'failed';
+      })
+      .addCase(fetchSuggestionsAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchSuggestionsAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.suggestions = action.payload;
+      })
+      .addCase(fetchSuggestionsAsync.rejected, (state) => {
+        state.status = 'failed';
       }),
 });
 
-export const { setNewTaskLabel, setFilter } = counterSlice.actions;
+export const { setNewTaskLabel, setFilter, setSuggestionsClosed, setSuggestions } =
+  counterSlice.actions;
 
 export const selectActiveTasks = (state: { task: TaskState }) => state.task.active;
 export const selectDoneTasks = (state: { task: TaskState }) => state.task.done;
 export const selectNewTaskLabel = (state: { task: TaskState }) => state.task.newTaskLabel;
 export const selectFilter = (state: { task: TaskState }) => state.task.filter;
+export const selectSuggestionsClosed = (state: { task: TaskState }) => state.task.suggestionsClosed;
+export const selectSuggestions = (state: { task: TaskState }) => state.task.suggestions;
 
 export default counterSlice.reducer;

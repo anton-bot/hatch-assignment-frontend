@@ -13,7 +13,7 @@ export const TaskCheckbox = (props: Props) => {
       <Checkbox
         label={label}
         checked={done}
-        onClick={() => dispatch(markCompletedAsync({ id, done: !done }))}
+        onChange={() => dispatch(markCompletedAsync({ id, done: !done }))}
         styles={{ label: { cursor: 'pointer' }, input: { cursor: 'pointer' } }}
       />
     </div>
